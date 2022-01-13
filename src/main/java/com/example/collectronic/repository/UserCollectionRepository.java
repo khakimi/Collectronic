@@ -14,6 +14,6 @@ public interface UserCollectionRepository extends JpaRepository<UserCollection, 
 
     List<UserCollection> findAllByUserOrderByCreatedDateDesc(User user);
     List<UserCollection> findAllByOrderByCreatedDate();
-    Optional<Collection> findUserCollectionByIdAndUser(Long id, User user);
+    Optional<UserCollection> findUserCollectionByIdAndUser(Long id, User user);
 
 }

@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByUserCollectionOrderByCreatedDateDesc(UserCollection userCollection);
     List<Item> findAllByOrderByCreatedDate();
-    Optional<Collection> findItemByIdAndUserCollection(Long id, UserCollection userCollection);
+    Optional<Item> findItemByIdAndUserCollection(Long id, UserCollection userCollection);
 }
