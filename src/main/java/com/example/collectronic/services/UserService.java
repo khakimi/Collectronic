@@ -1,5 +1,6 @@
 package com.example.collectronic.services;
 
+import com.example.collectronic.dto.UserDTO;
 import com.example.collectronic.entity.User;
 import com.example.collectronic.entity.enums.ERole;
 import com.example.collectronic.exceptions.UserExistException;
@@ -9,8 +10,11 @@ import com.example.collectronic.security.JWTTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 public class UserService {
@@ -43,5 +47,23 @@ public class UserService {
     }
 
 
+    public User updateUser(UserDTO userDTO, Principal principal){
+        User user = getUserByPrincipal(principal);
+        user.setName(userDTO.getName());
+        user.setName(user.getLastname());
+        return userRepository.save(user);
+
+    }
+
+    public User getCurrentUser(Principal principal){
+        return getUserByPrincipal(principal);
+    }
+
+    public User getUserByPrincipal(Principal principal){
+        String username = principal.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new UsernameNotFoundException(("User with username "+ username +" not found")));
+
+    }
 
 }
