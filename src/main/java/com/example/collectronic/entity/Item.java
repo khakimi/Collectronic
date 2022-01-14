@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,10 @@ public class Item {
     private String caption;
     private Integer likes;
     private String imageURL;
+
+    @Column
+    @ElementCollection(targetClass = String.class)
+    private Set<String> likedUsers = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private UserCollection userCollection;

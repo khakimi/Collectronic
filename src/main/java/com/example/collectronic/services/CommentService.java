@@ -16,7 +16,11 @@ public class CommentService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
-
+    public CommentService(CommentRepository commentRepository, ItemRepository itemRepository, UserRepository userRepository) {
+        this.commentRepository = commentRepository;
+        this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
+    }
 
     public User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
