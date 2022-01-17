@@ -14,7 +14,7 @@ public class ImageModel {
     private String url;
     @Column(nullable = false)
     private String public_id;
-    private String userId;
-    private String userCollectionId;
-    private String itemId;
+    private Long userId;
+    private Long userCollectionId;
+    private Long itemId;
 }

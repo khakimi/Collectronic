@@ -46,7 +46,7 @@ public class UserCollectionService {
 
     }
 
-    public List<UserCollection> getAllPost() {
+    public List<UserCollection> getAllUserCollection() {
         return userCollectionRepository.findAllByOrderByCreatedDate();
     }
 
@@ -56,13 +56,14 @@ public class UserCollectionService {
                 .orElseThrow(() -> new UserCollectionNotFoundException(("Collection can not be found for user: "+ user.getUsername())));
     }
 
-    public List<UserCollection> getAllUserCollection(Principal principal) {
+    public List<UserCollection> getAllUserCollectionForUser(Principal principal) {
         User user = getUserByPrincipal(principal);
         return userCollectionRepository.findAllByUserOrderByCreatedDateDesc(user);
     }
 
     public void deleteUserCollection(Long userCollectionId, Principal principal){
         UserCollection userCollection = getUserCollectionById(userCollectionId, principal);
+        userCollectionRepository.delete(userCollection);
 
     }
 
