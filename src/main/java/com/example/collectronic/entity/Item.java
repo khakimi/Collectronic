@@ -3,6 +3,7 @@ package com.example.collectronic.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +19,6 @@ public class Item {
     private String title;
     private String caption;
     private Integer likes;
-    private String imageURL;
 
     @Column
     @ElementCollection(targetClass = String.class)

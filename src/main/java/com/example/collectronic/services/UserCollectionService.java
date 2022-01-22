@@ -38,7 +38,6 @@ public class UserCollectionService {
         UserCollection userCollection = new UserCollection();
         userCollection.setUser(user);
         userCollection.setTitle(userCollectionDTO.getTitle());
-        userCollection.setImageURL(userCollectionDTO.getImageURL());
         userCollection.setDescription(userCollectionDTO.getDescription());
         userCollection.getSubjects().add(userCollectionDTO.getESubject());
         LOG.info("Creating collection for User: {}", user.getUsername());

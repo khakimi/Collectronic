@@ -19,7 +19,6 @@ public class UserCollection {
     private Long id;
     private String title;
     private String description;
-    private String imageURL;
 
     @ElementCollection(targetClass = ESubject.class)
     @CollectionTable(name = "UserCollection_subject",
