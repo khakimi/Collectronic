@@ -21,17 +21,23 @@ public class CloudinaryService {
     private Map<String, String> valuesMap = new HashMap<>();
 
     public CloudinaryService() {
-        valuesMap.put("cloud_name", "your_cloud_name");
-        valuesMap.put("api_key", "your_api_key");
-        valuesMap.put("api_secret", "your_api_secret");
+        valuesMap.put("cloud_name", System.getenv("CLOUD_NAME"));
+        valuesMap.put("api_key", System.getenv("API_KEY"));
+        valuesMap.put("api_secret", System.getenv("API_SECRET"));
         cloudinary = new Cloudinary(valuesMap);
     }
 
     public Map upload(MultipartFile multipartFile) throws IOException {
         File file = convert(multipartFile);
+        try{
         Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-        file.delete();
         return result;
+        }
+        catch (Exception e){
+            e.getMessage();
+        }
+        file.delete();
+        return null;
     }
 
     public Map delete(String id) throws IOException {

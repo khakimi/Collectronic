@@ -20,15 +20,17 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cloudinary")
+@RequestMapping("api/image")
 @CrossOrigin
 public class ImageController {
 
     @Autowired
-    CloudinaryService cloudinaryService;
+    private CloudinaryService cloudinaryService;
+
+
 
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
 
 
     @PostMapping("/upload")
@@ -41,12 +43,18 @@ public class ImageController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@RequestParam("id") long id)throws IOException {
-        if(!imageService.exists(id))
+    public ResponseEntity<?> delete(@PathVariable String id)throws IOException {
+        if(!imageService.exists(Long.parseLong(id)))
             return new ResponseEntity(new MessageResponse("Image not found"), HttpStatus.NOT_FOUND);
-        ImageModel image = imageService.findById(id);
-        cloudinaryService.delete(image.getPublic_id());
-        imageService.delete(id);
+        ImageModel image = imageService.findById(Long.parseLong(id));
+
+        try{
+            cloudinaryService.delete(image.getPublic_id());
+            imageService.delete(Long.parseLong(id));
+        }
+        catch(Exception e){
+            e.getMessage();
+        }
         return new ResponseEntity(new MessageResponse("Image deleted"), HttpStatus.OK);
     }
 }
