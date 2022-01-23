@@ -1,9 +1,11 @@
 package com.example.collectronic.services;
 
 import com.example.collectronic.dto.UserCollectionDTO;
+import com.example.collectronic.entity.ImageModel;
 import com.example.collectronic.entity.User;
 import com.example.collectronic.entity.UserCollection;
 import com.example.collectronic.exceptions.UserCollectionNotFoundException;
+import com.example.collectronic.repository.ImageRepository;
 import com.example.collectronic.repository.ItemRepository;
 import com.example.collectronic.repository.UserCollectionRepository;
 import com.example.collectronic.repository.UserRepository;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserCollectionService {
@@ -23,14 +27,20 @@ public class UserCollectionService {
     private final UserCollectionRepository userCollectionRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     @Autowired
     public UserCollectionService(UserCollectionRepository userCollectionRepository,
                                  UserRepository userRepository,
-                                 ItemRepository itemRepository) {
+                                 ItemRepository itemRepository,
+                                 ImageService imageService,
+                                 ImageRepository imageRepository) {
         this.userCollectionRepository = userCollectionRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
+        this.imageService = imageService;
+        this.imageRepository = imageRepository;
     }
 
     public UserCollection createUserCollection(UserCollectionDTO userCollectionDTO, Principal principal) {
@@ -39,8 +49,8 @@ public class UserCollectionService {
         userCollection.setUser(user);
         userCollection.setTitle(userCollectionDTO.getTitle());
         userCollection.setDescription(userCollectionDTO.getDescription());
-        userCollection.getSubjects().add(userCollectionDTO.getESubject());
-        LOG.info("Creating collection for User: {}", user.getUsername());
+        userCollection.setSubject(userCollectionDTO.getESubject());
+        LOG.info("Saving collection for User: {}", user.getUsername());
         return userCollectionRepository.save(userCollection);
 
     }
@@ -60,8 +70,12 @@ public class UserCollectionService {
         return userCollectionRepository.findAllByUserOrderByCreatedDateDesc(user);
     }
 
-    public void deleteUserCollection(Long userCollectionId, Principal principal){
+    public void deleteUserCollection(Long userCollectionId, Principal principal) throws IOException {
         UserCollection userCollection = getUserCollectionById(userCollectionId, principal);
+        Optional<ImageModel> imageModel = imageRepository.findByUserCollectionId(userCollection.getId());
+        if(imageModel.isPresent()){
+            imageService.delete(imageModel.get().getId());
+        }
         userCollectionRepository.delete(userCollection);
 
     }

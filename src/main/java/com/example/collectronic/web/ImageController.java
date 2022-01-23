@@ -47,14 +47,7 @@ public class ImageController {
         if(!imageService.exists(Long.parseLong(id)))
             return new ResponseEntity(new MessageResponse("Image not found"), HttpStatus.NOT_FOUND);
         ImageModel image = imageService.findById(Long.parseLong(id));
-
-        try{
-            cloudinaryService.delete(image.getPublic_id());
-            imageService.delete(Long.parseLong(id));
-        }
-        catch(Exception e){
-            e.getMessage();
-        }
+        imageService.delete(Long.parseLong(id));
         return new ResponseEntity(new MessageResponse("Image deleted"), HttpStatus.OK);
     }
 }

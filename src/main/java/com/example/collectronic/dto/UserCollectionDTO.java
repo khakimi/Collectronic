@@ -10,6 +10,6 @@ public class UserCollectionDTO {
     private Long id;
     private String title;
     private String description;
-    private User user;
+    private String username;
     private ESubject eSubject;
 }

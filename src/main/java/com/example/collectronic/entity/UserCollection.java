@@ -19,6 +19,7 @@ public class UserCollection {
     private Long id;
     private String title;
     private String description;
+    private ESubject subject;
 
     @ElementCollection(targetClass = ESubject.class)
     @CollectionTable(name = "UserCollection_subject",

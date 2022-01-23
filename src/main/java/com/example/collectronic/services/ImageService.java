@@ -30,13 +30,19 @@ public class ImageService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final UserCollectionRepository userCollectionRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public ImageService(ImageRepository imageRepository, UserRepository userRepository, ItemRepository itemRepository, UserCollectionRepository userCollectionRepository) {
+    public ImageService(ImageRepository imageRepository,
+                        UserRepository userRepository,
+                        ItemRepository itemRepository,
+                        UserCollectionRepository userCollectionRepository,
+                        CloudinaryService cloudinaryService) {
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.userCollectionRepository = userCollectionRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     public boolean exists(long id){
@@ -47,8 +53,12 @@ public class ImageService {
         return imageRepository.findById(id).orElseThrow(()-> new ImageNotFoundException("Image not found"));
     }
 
-    public void delete(long id){
-        imageRepository.deleteById(id);
+    public void delete(long id) throws IOException {
+        Optional <ImageModel> imageModel = imageRepository.findById(id);
+        if(imageModel.isPresent()) {
+            cloudinaryService.delete(imageModel.get().getPublic_id());
+            imageRepository.deleteById(id);
+        }
     }
 
 
