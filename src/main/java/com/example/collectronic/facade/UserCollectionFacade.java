@@ -11,7 +11,6 @@ public class UserCollectionFacade {
         userCollectionDTO.setId(userCollection.getId());
         userCollectionDTO.setUsername(userCollection.getUser().getUsername());
         userCollectionDTO.setDescription(userCollection.getDescription());
-        userCollectionDTO.setESubject(userCollection.getSubject());
         userCollectionDTO.setTitle(userCollection.getTitle());
         return userCollectionDTO;
     }

@@ -25,29 +25,49 @@ import java.util.Optional;
 public class ImageController {
 
     @Autowired
-    private CloudinaryService cloudinaryService;
-
-
-
-    @Autowired
     private ImageService imageService;
-
 
     @PostMapping("/upload")
     public ResponseEntity<MessageResponse> uploadImageToUser(@RequestParam("file") MultipartFile file,
                                                              Principal principal) throws IOException {
 
-        Map result = cloudinaryService.upload(file);
-        imageService.uploadImageToUser(file, principal, result);
+        imageService.uploadImageToUser(file, principal);
         return ResponseEntity.ok(new MessageResponse("Image Uploaded Successfully"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id)throws IOException {
-        if(!imageService.exists(Long.parseLong(id)))
-            return new ResponseEntity(new MessageResponse("Image not found"), HttpStatus.NOT_FOUND);
-        ImageModel image = imageService.findById(Long.parseLong(id));
-        imageService.delete(Long.parseLong(id));
-        return new ResponseEntity(new MessageResponse("Image deleted"), HttpStatus.OK);
+    @PostMapping("/{collectionId}/{itemId}/upload")
+    public ResponseEntity<MessageResponse> uploadImageToPost(@PathVariable("itemId") String itemId,
+                                                             @PathVariable("collectionId") String collectionId,
+                                                             @RequestParam("file") MultipartFile file,
+                                                             Principal principal) throws IOException {
+        imageService.uploadImageToItem(file, principal, Long.parseLong(itemId), Long.parseLong(collectionId));
+        return ResponseEntity.ok(new MessageResponse("Image Uploaded Successfully"));
     }
+
+    @PostMapping("/{collectionId}/upload")
+    public ResponseEntity<MessageResponse> uploadImageToPost(@PathVariable("collectionId") String collectionId,
+                                                             @RequestParam("file") MultipartFile file,
+                                                             Principal principal) throws IOException {
+        imageService.uploadImageToUserCollection(file, principal, Long.parseLong(collectionId));
+        return ResponseEntity.ok(new MessageResponse("Image Uploaded Successfully"));
+    }
+
+    @GetMapping("/profileImage")
+    public ResponseEntity<ImageModel> getImageForUser(Principal principal) {
+        ImageModel userImage = imageService.getImageToUser(principal);
+        return new ResponseEntity<>(userImage, HttpStatus.OK);
+    }
+
+    @GetMapping("/{itemId}/image")
+    public ResponseEntity<ImageModel> getImageToItem(@PathVariable("itemId") String itemId) {
+        ImageModel itemImage = imageService.getImageToItem(Long.parseLong(itemId));
+        return new ResponseEntity<>(itemImage, HttpStatus.OK);
+    }
+
+    @GetMapping("/{collectionId}/image")
+    public ResponseEntity<ImageModel> getImageToUserCollection(@PathVariable("collectionId") String collectionId) {
+        ImageModel userCollectionImage = imageService.getImageToUserCollection(Long.parseLong(collectionId));
+        return new ResponseEntity<>(userCollectionImage, HttpStatus.OK);
+    }
+
 }

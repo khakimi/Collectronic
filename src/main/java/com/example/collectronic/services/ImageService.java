@@ -2,7 +2,9 @@ package com.example.collectronic.services;
 
 
 import com.example.collectronic.entity.ImageModel;
+import com.example.collectronic.entity.Item;
 import com.example.collectronic.entity.User;
+import com.example.collectronic.entity.UserCollection;
 import com.example.collectronic.exceptions.ImageNotFoundException;
 import com.example.collectronic.repository.ImageRepository;
 import com.example.collectronic.repository.ItemRepository;
@@ -62,18 +64,58 @@ public class ImageService {
     }
 
 
-    public ImageModel uploadImageToUser(MultipartFile file, Principal principal, Map result) throws IOException {
+    public ImageModel uploadImageToUser(MultipartFile file, Principal principal) throws IOException {
         User user = getUserByPrincipal(principal);
         LOG.info("Uploading image profile to User {}", user.getUsername());
 
         ImageModel userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
         if (!ObjectUtils.isEmpty(userProfileImage)) {
-            imageRepository.delete(userProfileImage);
+            delete(userProfileImage.getId());
         }
+        Map result = cloudinaryService.upload(file);
         ImageModel imageModel = new ImageModel();
         imageModel.setPublic_id((String)result.get("public_id"));
         imageModel.setUrl((String)result.get("url"));
         imageModel.setUserId(user.getId());
+        LOG.info("Uploading image to User {}", user.getId());
+        return imageRepository.save(imageModel);
+    }
+
+    public ImageModel uploadImageToItem(MultipartFile file, Principal principal, Long itemId, Long userCollectionId) throws IOException {
+        User user = getUserByPrincipal(principal);
+        UserCollection userCollection = user.getUserCollections().stream().
+                filter(c->c.getId().equals(userCollectionId)).collect(toSingleItemCollector());
+        Item item = userCollection.getItems().stream().
+                filter(i->i.getId().equals(itemId)).collect(toSingleItemCollector());
+        ImageModel itemImage = imageRepository.findByItemId(item.getId()).orElse(null);
+        if (!ObjectUtils.isEmpty(itemImage)) {
+            delete(itemImage.getId());
+        }
+        Map result = cloudinaryService.upload(file);
+        ImageModel imageModel = new ImageModel();
+        imageModel.setItemId(item.getId());
+        imageModel.setPublic_id((String)result.get("public_id"));
+        imageModel.setUrl((String)result.get("url"));
+        LOG.info("Uploading image to item {}", item.getId());
+
+        return imageRepository.save(imageModel);
+    }
+
+    public ImageModel uploadImageToUserCollection(MultipartFile file, Principal principal, Long userCollectionId) throws IOException {
+        User user = getUserByPrincipal(principal);
+        UserCollection userCollection = user.getUserCollections().stream().
+                filter(c->c.getId().equals(userCollectionId)).collect(toSingleItemCollector());
+        Map result = cloudinaryService.upload(file);
+        ImageModel userCollectionImage = imageRepository.findByUserCollectionId(userCollection.getId()).orElse(null);
+        if (!ObjectUtils.isEmpty(userCollectionImage)) {
+            delete(userCollectionImage.getId());
+        }
+        ImageModel imageModel = new ImageModel();
+        imageModel.setUserCollectionId(userCollection.getId());
+        imageModel.setPublic_id((String)result.get("public_id"));
+        imageModel.setUrl((String)result.get("url"));
+        LOG.info("Uploading image to item {}", userCollection.getId());
+
         return imageRepository.save(imageModel);
     }
 
@@ -81,28 +123,16 @@ public class ImageService {
         User user = getUserByPrincipal(principal);
 
         ImageModel imageModel = imageRepository.findByUserId(user.getId()).orElse(null);
-        if (!ObjectUtils.isEmpty(imageModel)) {
-            //imageModel.setImageBytes(decompressBytes(imageModel.getImageBytes()));
-        }
-
         return imageModel;
     }
     public ImageModel getImageToItem(Long itemId) {
         ImageModel imageModel = imageRepository.findByItemId(itemId)
-                .orElseThrow(() -> new ImageNotFoundException("Cannot find image to Post: " + itemId));
-        if (!ObjectUtils.isEmpty(imageModel)) {
-            //imageModel.setImageBytes(decompressBytes(imageModel.getImageBytes()));
-        }
-
+                .orElseThrow(() -> new ImageNotFoundException("Cannot find image to Item: " + itemId));
         return imageModel;
     }
     public ImageModel getImageToUserCollection(Long userCollectionId) {
         ImageModel imageModel = imageRepository.findByUserCollectionId(userCollectionId)
                 .orElseThrow(() -> new ImageNotFoundException("Cannot find image to UserCollection: " + userCollectionId));
-        if (!ObjectUtils.isEmpty(imageModel)) {
-            //imageModel.setImageBytes(decompressBytes(imageModel.getImageBytes()));
-        }
-
         return imageModel;
     }
     public User getUserByPrincipal(Principal principal) {

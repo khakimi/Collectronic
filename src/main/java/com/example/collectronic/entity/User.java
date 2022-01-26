@@ -32,8 +32,6 @@ public class User implements UserDetails {
     joinColumns = @JoinColumn(name = "user_id"))
     private Set<ERole> roles = new HashSet<>();
 
-    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
-            //mappedBy = "user", orphanRemoval = true)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
             mappedBy = "user", orphanRemoval = true)
     private List<UserCollection> userCollections = new ArrayList<>();

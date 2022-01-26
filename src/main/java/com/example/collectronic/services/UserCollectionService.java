@@ -49,7 +49,6 @@ public class UserCollectionService {
         userCollection.setUser(user);
         userCollection.setTitle(userCollectionDTO.getTitle());
         userCollection.setDescription(userCollectionDTO.getDescription());
-        userCollection.setSubject(userCollectionDTO.getESubject());
         LOG.info("Saving collection for User: {}", user.getUsername());
         return userCollectionRepository.save(userCollection);
 

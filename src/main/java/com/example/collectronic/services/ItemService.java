@@ -59,7 +59,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public List<Item> getAllItemsForUserCollection(Long userCollectionId){
+    public List<Item> getAllItemsToUserCollection(Long userCollectionId){
         return itemRepository.findAllByUserCollectionOrderByCreatedDateDesc(userCollectionRepository.findById(userCollectionId)
                 .orElseThrow(() -> new UserCollectionNotFoundException(("Collection can not be found "))));
 

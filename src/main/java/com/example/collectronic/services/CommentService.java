@@ -52,7 +52,7 @@ public class CommentService {
         return comments;
     }
 
-    public void deleteComments(Long commentId){
+    public void deleteComment(Long commentId){
         Optional<Comment> comment = commentRepository.findById(commentId);
         comment.ifPresent(commentRepository::delete);
     }
