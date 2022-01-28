@@ -1,6 +1,9 @@
 package com.example.collectronic.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -14,7 +17,10 @@ public class ImageModel {
     private String url;
     @Column(nullable = false)
     private String public_id;
+    @Column( unique = true, updatable = false)
     private Long userId;
+    @Column( unique = true, updatable = false)
     private Long userCollectionId;
+    @Column( unique = true, updatable = false)
     private Long itemId;
 }

@@ -1,8 +1,13 @@
 package com.example.collectronic.entity;
 
 import com.example.collectronic.entity.enums.ERole;
+//import com.example.collectronic.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +17,7 @@ import java.util.*;
 
 @Data
 @Entity
+
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +33,11 @@ public class User implements UserDetails {
     @Column (length = 3000)
     private String password;
 
-    @ElementCollection(targetClass = ERole.class)
-    @CollectionTable(name = "user_role",
-    joinColumns = @JoinColumn(name = "user_id"))
-    private Set<ERole> roles = new HashSet<>();
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinTable(  name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
             mappedBy = "user", orphanRemoval = true)
@@ -91,4 +98,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

@@ -8,10 +8,12 @@ import org.springframework.stereotype.Component;
 public class ItemFacade {
     public ItemDTO itemToItemDTO(Item item){
         ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setId(itemDTO.getId());
+        itemDTO.setId(item.getId());
         itemDTO.setTitle(item.getTitle());
         itemDTO.setCaption(item.getCaption());
-        itemDTO.setLikes(itemDTO.getLikes());
+        itemDTO.setLikes(item.getLikes());
+        itemDTO.setUsersLiked(item.getLikedUsers());
+        itemDTO.setUsername(item.getUserCollection().getUser().getUsername());
         return itemDTO;
     }
 }

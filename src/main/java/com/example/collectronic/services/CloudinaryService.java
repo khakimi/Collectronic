@@ -30,8 +30,8 @@ public class CloudinaryService {
     public Map upload(MultipartFile multipartFile) throws IOException {
         File file = convert(multipartFile);
         try{
-        Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-        return result;
+            Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            return result;
         }
         catch (Exception e){
             e.getMessage();

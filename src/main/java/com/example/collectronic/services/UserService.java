@@ -3,6 +3,7 @@ package com.example.collectronic.services;
 import com.example.collectronic.dto.UserDTO;
 import com.example.collectronic.entity.User;
 import com.example.collectronic.entity.enums.ERole;
+//import com.example.collectronic.entity.enums.Role;
 import com.example.collectronic.exceptions.UserExistException;
 import com.example.collectronic.payload.request.SignupRequest;
 import com.example.collectronic.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserService {
         user.setLastname(userIn.getLastname());
         user.setUsername(userIn.getUsername());
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
-        user.getRoles().add(ERole.ROLE_USER);
+        //user.getRoles().add(new Role(ERole.ROLE_USER));
 
         try {
             LOG.info("Saving User {}", userIn.getEmail());

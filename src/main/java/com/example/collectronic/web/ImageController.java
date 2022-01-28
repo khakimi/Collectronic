@@ -36,7 +36,7 @@ public class ImageController {
     }
 
     @PostMapping("/{collectionId}/{itemId}/upload")
-    public ResponseEntity<MessageResponse> uploadImageToPost(@PathVariable("itemId") String itemId,
+    public ResponseEntity<MessageResponse> uploadImageToItem(@PathVariable("itemId") String itemId,
                                                              @PathVariable("collectionId") String collectionId,
                                                              @RequestParam("file") MultipartFile file,
                                                              Principal principal) throws IOException {
@@ -45,26 +45,26 @@ public class ImageController {
     }
 
     @PostMapping("/{collectionId}/upload")
-    public ResponseEntity<MessageResponse> uploadImageToPost(@PathVariable("collectionId") String collectionId,
+    public ResponseEntity<MessageResponse> uploadImageToCollection(@PathVariable("collectionId") String collectionId,
                                                              @RequestParam("file") MultipartFile file,
                                                              Principal principal) throws IOException {
         imageService.uploadImageToUserCollection(file, principal, Long.parseLong(collectionId));
         return ResponseEntity.ok(new MessageResponse("Image Uploaded Successfully"));
     }
 
-    @GetMapping("/profileImage")
+    @GetMapping("/profile/image")
     public ResponseEntity<ImageModel> getImageForUser(Principal principal) {
         ImageModel userImage = imageService.getImageToUser(principal);
         return new ResponseEntity<>(userImage, HttpStatus.OK);
     }
 
-    @GetMapping("/{itemId}/image")
+    @GetMapping("/{itemId}/item")
     public ResponseEntity<ImageModel> getImageToItem(@PathVariable("itemId") String itemId) {
         ImageModel itemImage = imageService.getImageToItem(Long.parseLong(itemId));
         return new ResponseEntity<>(itemImage, HttpStatus.OK);
     }
 
-    @GetMapping("/{collectionId}/image")
+    @GetMapping("/{collectionId}/collection")
     public ResponseEntity<ImageModel> getImageToUserCollection(@PathVariable("collectionId") String collectionId) {
         ImageModel userCollectionImage = imageService.getImageToUserCollection(Long.parseLong(collectionId));
         return new ResponseEntity<>(userCollectionImage, HttpStatus.OK);

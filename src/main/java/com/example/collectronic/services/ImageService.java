@@ -116,8 +116,11 @@ public class ImageService {
         imageModel.setUrl((String)result.get("url"));
         LOG.info("Uploading image to item {}", userCollection.getId());
 
+
         return imageRepository.save(imageModel);
     }
+
+
 
     public ImageModel getImageToUser(Principal principal) {
         User user = getUserByPrincipal(principal);

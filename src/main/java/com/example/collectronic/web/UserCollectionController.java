@@ -32,7 +32,7 @@ public class UserCollectionController {
     private ResponseErrorValidation responseErrorValidation;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createPost(@Valid @RequestBody UserCollectionDTO userCollectionDTO,
+    public ResponseEntity<Object> createCollection(@Valid @RequestBody UserCollectionDTO userCollectionDTO,
                                              BindingResult bindingResult,
                                              Principal principal) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
@@ -45,7 +45,7 @@ public class UserCollectionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserCollectionDTO>> getAllPosts() {
+    public ResponseEntity<List<UserCollectionDTO>> getAllCollections() {
         List<UserCollectionDTO> postDTOList = userCollectionService.getAllUserCollection()
                 .stream()
                 .map(userCollectionFacade::userCollectionToUserCollectionDTO)
@@ -64,8 +64,15 @@ public class UserCollectionController {
         return new ResponseEntity<>(userCollectionDTOS, HttpStatus.OK);
     }
 
+    @GetMapping("{collectionId}")
+    public ResponseEntity<UserCollectionDTO> getCollectionById(@PathVariable("collectionId") String collectionId, Principal principal) {
+        UserCollectionDTO userCollectionDTO = userCollectionFacade.userCollectionToUserCollectionDTO(
+                userCollectionService.getUserCollectionById(Long.parseLong(collectionId),principal));
+        return new ResponseEntity<>(userCollectionDTO, HttpStatus.OK);
+    }
+
     @PostMapping("/{collectionId}/delete")
-    public ResponseEntity<MessageResponse> deletePost(@PathVariable("collectionId") String collectionId, Principal principal) throws IOException {
+    public ResponseEntity<MessageResponse> deleteCollection(@PathVariable("collectionId") String collectionId, Principal principal) throws IOException {
         userCollectionService.deleteUserCollection(Long.parseLong(collectionId), principal);
         return new ResponseEntity<>(new MessageResponse("Collection was deleted"), HttpStatus.OK);
     }

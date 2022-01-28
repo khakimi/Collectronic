@@ -1,6 +1,7 @@
 package com.example.collectronic.web;
 
 import com.example.collectronic.dto.ItemDTO;
+import com.example.collectronic.dto.UserCollectionDTO;
 import com.example.collectronic.entity.Item;
 import com.example.collectronic.facade.ItemFacade;
 import com.example.collectronic.payload.response.MessageResponse;
@@ -56,8 +57,18 @@ public class ItemController {
         return new ResponseEntity<>(itemDTOList, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ItemDTO>> getAllItems() {
+        List<ItemDTO> itemDTOList = itemService.getAllItems()
+                .stream()
+                .map(itemFacade::itemToItemDTO)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(itemDTOList, HttpStatus.OK);
+    }
+
     @PostMapping("/{itemId}/{username}/like")
-    public ResponseEntity<ItemDTO> likePost(@PathVariable("itemId") String itemId,
+    public ResponseEntity<ItemDTO> likeItem(@PathVariable("itemId") String itemId,
                                             @PathVariable("username") String username) {
         Item item = itemService.likeItem(Long.parseLong(itemId), username);
         ItemDTO itemDTO = itemFacade.itemToItemDTO(item);
@@ -66,7 +77,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/delete")
-    public ResponseEntity<MessageResponse> deletePost(@PathVariable("itemId") String itemId, Principal principal) throws IOException {
+    public ResponseEntity<MessageResponse> deleteItem(@PathVariable("itemId") String itemId, Principal principal) throws IOException {
         itemService.deleteItem(Long.parseLong(itemId), principal);
         return new ResponseEntity<>(new MessageResponse("Item was deleted"), HttpStatus.OK);
     }

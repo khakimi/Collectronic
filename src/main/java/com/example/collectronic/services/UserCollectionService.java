@@ -2,6 +2,7 @@ package com.example.collectronic.services;
 
 import com.example.collectronic.dto.UserCollectionDTO;
 import com.example.collectronic.entity.ImageModel;
+import com.example.collectronic.entity.Item;
 import com.example.collectronic.entity.User;
 import com.example.collectronic.entity.UserCollection;
 import com.example.collectronic.exceptions.UserCollectionNotFoundException;
@@ -29,18 +30,21 @@ public class UserCollectionService {
     private final ItemRepository itemRepository;
     private final ImageService imageService;
     private final ImageRepository imageRepository;
+    private final ItemService itemService;
 
     @Autowired
     public UserCollectionService(UserCollectionRepository userCollectionRepository,
                                  UserRepository userRepository,
                                  ItemRepository itemRepository,
                                  ImageService imageService,
-                                 ImageRepository imageRepository) {
+                                 ImageRepository imageRepository,
+                                 ItemService itemService) {
         this.userCollectionRepository = userCollectionRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.imageService = imageService;
         this.imageRepository = imageRepository;
+        this.itemService = itemService;
     }
 
     public UserCollection createUserCollection(UserCollectionDTO userCollectionDTO, Principal principal) {
@@ -72,6 +76,9 @@ public class UserCollectionService {
     public void deleteUserCollection(Long userCollectionId, Principal principal) throws IOException {
         UserCollection userCollection = getUserCollectionById(userCollectionId, principal);
         Optional<ImageModel> imageModel = imageRepository.findByUserCollectionId(userCollection.getId());
+        for (Item item: userCollection.getItems()) {
+            itemService.deleteItem(item.getId(), principal);
+        }
         if(imageModel.isPresent()){
             imageService.delete(imageModel.get().getId());
         }

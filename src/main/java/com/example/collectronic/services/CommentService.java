@@ -54,7 +54,8 @@ public class CommentService {
 
     public void deleteComment(Long commentId){
         Optional<Comment> comment = commentRepository.findById(commentId);
-        comment.ifPresent(commentRepository::delete);
+        if(comment.isPresent())
+            commentRepository.delete(comment.get());
     }
 
     public User getUserByPrincipal(Principal principal) {

@@ -1,6 +1,9 @@
 package com.example.collectronic.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -24,7 +27,7 @@ public class Item {
     @ElementCollection(targetClass = String.class)
     private Set<String> likedUsers = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserCollection userCollection;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
             mappedBy = "item", orphanRemoval = true)

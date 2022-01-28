@@ -69,6 +69,10 @@ public class ItemService {
         return itemRepository.getById(itemId);
     }
 
+    public List<Item> getAllItems() {
+        return itemRepository.findAllByOrderByCreatedDate();
+    }
+
     public Item likeItem(Long itemId, String username){
         Item item = itemRepository.findById(itemId).orElseThrow(()->new ItemNotFoundException("Item cannot be found"));
         Optional<String> userLiked = item.getLikedUsers().stream().filter(u -> u.equals(username)).findAny();
