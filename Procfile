@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* CollectronicApplication
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.example.collectronic.CollectronicApplication
