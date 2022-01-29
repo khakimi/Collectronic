@@ -9,7 +9,7 @@ public class UserCollectionFacade {
     public UserCollectionDTO userCollectionToUserCollectionDTO(UserCollection userCollection){
         UserCollectionDTO userCollectionDTO = new UserCollectionDTO();
         userCollectionDTO.setId(userCollection.getId());
-        userCollectionDTO.setUsername(userCollection.getUser().getUsername());
+        userCollectionDTO.setUsername(userCollection.getCollectronicuser().getUsername());
         userCollectionDTO.setDescription(userCollection.getDescription());
         userCollectionDTO.setTitle(userCollection.getTitle());
         return userCollectionDTO;

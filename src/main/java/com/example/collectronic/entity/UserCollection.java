@@ -21,7 +21,7 @@ public class UserCollection {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private User collectronicuser;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
             mappedBy = "userCollection", orphanRemoval = true)

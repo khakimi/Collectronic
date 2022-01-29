@@ -50,7 +50,7 @@ public class UserCollectionService {
     public UserCollection createUserCollection(UserCollectionDTO userCollectionDTO, Principal principal) {
         User user = getUserByPrincipal(principal);
         UserCollection userCollection = new UserCollection();
-        userCollection.setUser(user);
+        userCollection.setCollectronicuser(user);
         userCollection.setTitle(userCollectionDTO.getTitle());
         userCollection.setDescription(userCollectionDTO.getDescription());
         LOG.info("Saving collection for User: {}", user.getUsername());
@@ -64,13 +64,13 @@ public class UserCollectionService {
 
     public UserCollection getUserCollectionById(Long userCollectionId, Principal principal) {
         User user = getUserByPrincipal(principal);
-        return userCollectionRepository.findUserCollectionByIdAndUser(userCollectionId, user)
+        return userCollectionRepository.findUserCollectionByIdAndCollectronicuser(userCollectionId, user)
                 .orElseThrow(() -> new UserCollectionNotFoundException(("Collection can not be found for user: "+ user.getUsername())));
     }
 
     public List<UserCollection> getAllUserCollectionForUser(Principal principal) {
         User user = getUserByPrincipal(principal);
-        return userCollectionRepository.findAllByUserOrderByCreatedDateDesc(user);
+        return userCollectionRepository.findAllByCollectronicuserOrderByCreatedDateDesc(user);
     }
 
     public void deleteUserCollection(Long userCollectionId, Principal principal) throws IOException {

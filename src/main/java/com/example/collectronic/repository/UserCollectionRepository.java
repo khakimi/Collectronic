@@ -12,8 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserCollectionRepository extends JpaRepository<UserCollection, Long> {
 
-    List<UserCollection> findAllByUserOrderByCreatedDateDesc(User user);
+    List<UserCollection> findAllByCollectronicuserOrderByCreatedDateDesc(User user);
     List<UserCollection> findAllByOrderByCreatedDate();
-    Optional<UserCollection> findUserCollectionByIdAndUser(Long id, User user);
+    Optional<UserCollection> findUserCollectionByIdAndCollectronicuser(Long id, User user);
 
 }

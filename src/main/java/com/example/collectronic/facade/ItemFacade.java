@@ -13,7 +13,7 @@ public class ItemFacade {
         itemDTO.setCaption(item.getCaption());
         itemDTO.setLikes(item.getLikes());
         itemDTO.setUsersLiked(item.getLikedUsers());
-        itemDTO.setUsername(item.getUserCollection().getUser().getUsername());
+        itemDTO.setUsername(item.getUserCollection().getCollectronicuser().getUsername());
         return itemDTO;
     }
 }
