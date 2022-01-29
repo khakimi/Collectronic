@@ -83,24 +83,10 @@
     <build>
         <plugins>
             <plugin>
-
-                <!-- Building an executable jar -->
-
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-
-                            <!-- give full qualified name of your main class-->
-                            <mainClass>com.example.collectronic.CollectronicApplication</mainClass>
-
-                        </manifest>
-                    </archive>
-                </configuration>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>3.0.3</version>
             </plugin>
         </plugins>
     </build>
-
 </project>
