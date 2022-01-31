@@ -2,7 +2,9 @@ package com.example.collectronic.web;
 
 import com.example.collectronic.dto.ItemDTO;
 import com.example.collectronic.dto.UserCollectionDTO;
+import com.example.collectronic.dto.UserDTO;
 import com.example.collectronic.entity.Item;
+import com.example.collectronic.entity.User;
 import com.example.collectronic.facade.ItemFacade;
 import com.example.collectronic.payload.response.MessageResponse;
 import com.example.collectronic.services.ItemService;
@@ -80,5 +82,14 @@ public class ItemController {
     public ResponseEntity<MessageResponse> deleteItem(@PathVariable("itemId") String itemId, Principal principal) throws IOException {
         itemService.deleteItem(Long.parseLong(itemId), principal);
         return new ResponseEntity<>(new MessageResponse("Item was deleted"), HttpStatus.OK);
+    }
+
+    @PostMapping("/{itemId}/update")
+    public ResponseEntity<Object> updateUser(@PathVariable("itemId") String itemId, @Valid @RequestBody ItemDTO itemDTO, BindingResult bindingResult){
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+        if(!org.springframework.util.ObjectUtils.isEmpty(errors)) return  errors;
+        Item item = itemService.updateItem(itemDTO, Long.parseLong(itemId));
+        ItemDTO itemUpdated = itemFacade.itemToItemDTO(item);
+        return new ResponseEntity<>(itemUpdated, HttpStatus.OK);
     }
 }

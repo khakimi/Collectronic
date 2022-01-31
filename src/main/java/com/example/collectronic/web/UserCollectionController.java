@@ -1,6 +1,8 @@
 package com.example.collectronic.web;
 
+import com.example.collectronic.dto.ItemDTO;
 import com.example.collectronic.dto.UserCollectionDTO;
+import com.example.collectronic.entity.Item;
 import com.example.collectronic.entity.UserCollection;
 import com.example.collectronic.facade.UserCollectionFacade;
 import com.example.collectronic.payload.response.MessageResponse;
@@ -75,5 +77,14 @@ public class UserCollectionController {
     public ResponseEntity<MessageResponse> deleteCollection(@PathVariable("collectionId") String collectionId, Principal principal) throws IOException {
         userCollectionService.deleteUserCollection(Long.parseLong(collectionId), principal);
         return new ResponseEntity<>(new MessageResponse("Collection was deleted"), HttpStatus.OK);
+    }
+
+    @PostMapping("/{collectionId}/update")
+    public ResponseEntity<Object> updateUser(@PathVariable("collectionId") String collectionId, @Valid @RequestBody UserCollectionDTO userCollectionDTO, BindingResult bindingResult, Principal principal){
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+        if(!org.springframework.util.ObjectUtils.isEmpty(errors)) return  errors;
+        UserCollection userCollection = userCollectionService.updateUserCollection(userCollectionDTO, Long.parseLong(collectionId), principal);
+        UserCollectionDTO collectionUpdated = userCollectionFacade.userCollectionToUserCollectionDTO(userCollection);
+        return new ResponseEntity<>(collectionUpdated, HttpStatus.OK);
     }
 }

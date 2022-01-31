@@ -1,6 +1,7 @@
 package com.example.collectronic.services;
 
 import com.example.collectronic.dto.ItemDTO;
+import com.example.collectronic.dto.UserDTO;
 import com.example.collectronic.entity.ImageModel;
 import com.example.collectronic.entity.Item;
 import com.example.collectronic.entity.User;
@@ -93,6 +94,14 @@ public class ItemService {
             imageService.delete(imageModel.get().getId());
         }
         itemRepository.delete(item);
+    }
+
+    public Item updateItem(ItemDTO itemDTO, Long itemId){
+        Item item = getItemById(itemId);
+        item.setTitle(itemDTO.getTitle());
+        item.setCaption(itemDTO.getCaption());
+        return itemRepository.save(item);
+
     }
 
 

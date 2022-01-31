@@ -1,5 +1,6 @@
 package com.example.collectronic.services;
 
+import com.example.collectronic.dto.ItemDTO;
 import com.example.collectronic.dto.UserCollectionDTO;
 import com.example.collectronic.entity.ImageModel;
 import com.example.collectronic.entity.Item;
@@ -86,6 +87,13 @@ public class UserCollectionService {
 
     }
 
+    public UserCollection updateUserCollection(UserCollectionDTO userCollectionDTO, Long collectionId, Principal principal){
+        UserCollection userCollection = getUserCollectionById(collectionId, principal);
+        userCollection.setTitle(userCollectionDTO.getTitle());
+        userCollection.setDescription(userCollectionDTO.getDescription());
+        return userCollectionRepository.save(userCollection);
+
+    }
 
     public User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
